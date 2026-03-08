@@ -3,18 +3,18 @@ services:
     name: domino-cre-backend
     runtime: docker
     dockerfilePath: CRE.Dockerfile
-    plan: starter # Change to 'free' if you want the free tier, but it may sleep
+    plan: free # Use 'free' for the demo to avoid immediate charges
     envVars:
       - key: SEPOLIA_RPC_URL
         sync: false
       - key: PRIVATE_KEY
         sync: false
       - key: MARKET_REGISTRY_ADDRESS
-        value: 0x492da4DB64532C73a9a22eD2A29Cb54dd3bA737e
+        value: 0x13AdAA22517Ef23ac0F614693784BA85a561AcF7
       - key: TRADING_ENGINE_ADDRESS
-        value: 0x5A072ecd7355b26160b2368cF2920b798f583032
+        value: 0xA9953882dBfAc22a2D74bDfB4B758e7e2054202a
       - key: SETTLEMENT_MANAGER_ADDRESS
-        value: 0xA18776da88f1E38275d0A0fb2447BEE1bE777f00
+        value: 0xBe4cf606D22c249687865b7653be572Cb670879f
       - key: GEMINI_API_KEY
         sync: false
       - key: PINATA_API_KEY
