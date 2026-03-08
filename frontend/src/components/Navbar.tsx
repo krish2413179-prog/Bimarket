@@ -10,15 +10,29 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ lastEventTimestamp }) => {
   const { account, connectWallet, disconnectWallet } = useWeb3();
   const [timeLeft, setTimeLeft] = useState<string>("--:--");
+  const [isBackendOnline, setIsBackendOnline] = useState<boolean | null>(null);
 
   useEffect(() => {
-    // Demo mode: 10 minute drops (600,000 ms)
-    const DROP_INTERVAL = 600000; 
-    const baseTimestamp = lastEventTimestamp || (Date.now() - 300000); // Faux timestamp if 0 markets
+    const checkHealth = async () => {
+      try {
+        const res = await fetch('https://domino-cre-backend.onrender.com');
+        setIsBackendOnline(res.ok);
+      } catch (e) {
+        setIsBackendOnline(false);
+      }
+    };
+    checkHealth();
+    const healthInterval = setInterval(checkHealth, 30000);
+    return () => clearInterval(healthInterval);
+  }, []);
+
+  useEffect(() => {
+    // Demo mode: 30 minute drops (1,800,000 ms) to match backend
+    const DROP_INTERVAL = 1800000; 
+    const baseTimestamp = lastEventTimestamp || (Date.now() - 900000);
     
     const interval = setInterval(() => {
       const now = Date.now();
-      // Calculate next drop time based on the interval
       const timeSinceLast = (now - baseTimestamp) % DROP_INTERVAL;
       const nextDrop = now + (DROP_INTERVAL - timeSinceLast);
       
@@ -68,6 +82,30 @@ const Navbar: React.FC<NavbarProps> = ({ lastEventTimestamp }) => {
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+        {/* Backend Engine Status Indicator */}
+        <div style={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          gap: '8px', 
+          padding: '6px 12px', 
+          background: 'rgba(5, 5, 5, 0.4)', 
+          borderRadius: '12px', 
+          border: '1px solid var(--border-subtle)',
+          fontSize: '12px'
+        }}>
+          <div style={{ 
+            width: '8px', 
+            height: '8px', 
+            borderRadius: '50%', 
+            background: isBackendOnline === null ? '#f59e0b' : (isBackendOnline ? '#10b981' : '#ef4444'),
+            boxShadow: isBackendOnline ? '0 0 10px #10b981' : 'none',
+            animation: isBackendOnline ? 'pulse 2s infinite' : 'none'
+          }} />
+          <span style={{ color: 'var(--text-secondary)', fontWeight: 500 }}>
+            ENGINE: {isBackendOnline === null ? 'SYNCING' : (isBackendOnline ? 'ONLINE' : 'OFFLINE')}
+          </span>
+        </div>
+
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '6px 12px', background: 'rgba(0, 240, 255, 0.05)', borderRadius: '12px', border: '1px solid rgba(0, 240, 255, 0.2)', color: 'var(--accent-primary)' }}>
           <Clock size={16} />
           <span style={{ fontSize: '13px', fontWeight: 600 }}>Next drop: {timeLeft}</span>
