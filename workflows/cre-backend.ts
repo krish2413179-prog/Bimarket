@@ -129,7 +129,7 @@ async function generateAndDeployMarket() {
     const registry = new ethers.Contract(process.env.MARKET_REGISTRY_ADDRESS || "", REGISTRY_ABI, deployer);
 
     const initialLiquidity = ethers.parseEther("0.01");
-    const monitoringDuration = 7200; // 2 hours instead of 7 days
+    const monitoringDuration = 86400; // 24 hours
 
     console.log(`🚀 [Generator] Deploying Market to Sepolia...`);
     const tx = await registry.createMarket(ipfsHash, monitoringDuration, initialLiquidity, { value: initialLiquidity });
@@ -193,10 +193,11 @@ async function runOrchestrationLoop() {
           config = {
             marketId,
             eventADefinition: { description: json.eventA.description, dataSources: [json.eventA.dataSource], detectionCriteria: { type: "AI_ORACLE", condition: json.eventA.aiCondition }, consensusThreshold: 0.67 },
-            eventBDefinition: { description: json.eventB.description, dataSources: [json.eventB.dataSource], detectionCriteria: { type: "AI_ORACLE", condition: json.eventB.aiCondition }, monitoringDuration: 7200, consensusThreshold: 0.67 },
+            eventBDefinition: { description: json.eventB.description, dataSources: [json.eventB.dataSource], detectionCriteria: { type: "AI_ORACLE", condition: json.eventB.aiCondition }, monitoringDuration: 86400, consensusThreshold: 0.67 },
             contractAddress: process.env.SETTLEMENT_MANAGER_ADDRESS || "",
-            pollIntervalSeconds: 60,
-            expiresAt: Number(m.expiresAt) * 1000
+            pollIntervalSeconds: 600,
+            expiresAt: Number(m.expiresAt) * 1000,
+            createdAt: Number(m.createdAt)
           };
         } catch (fetchErr) {
           console.error(`❌ [Runner] Error processing market ${marketId}:`, fetchErr);
@@ -231,9 +232,9 @@ async function start() {
   await runOrchestrationLoop();
   await generateAndDeployMarket();
 
-  // 2. Set intervals for rapid demo
-  setInterval(runOrchestrationLoop, 1 * 60 * 1000); // Poll every 1 min
-  setInterval(generateAndDeployMarket, 10 * 60 * 1000); // Generate every 10 mins
+  // 2. Set intervals for rapid demo (Updated: 30-min generation, 10-min poll)
+  setInterval(runOrchestrationLoop, 10 * 60 * 1000); // Poll every 10 min
+  setInterval(generateAndDeployMarket, 30 * 60 * 1000); // Generate every 30 mins
 }
 
 start().catch(console.error);

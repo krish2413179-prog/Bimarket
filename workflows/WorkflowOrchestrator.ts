@@ -49,6 +49,7 @@ export interface WorkflowConfig {
   contractAddress: string;
   pollIntervalSeconds: number;
   expiresAt: number; // Overall market expiration (for Event A)
+  createdAt: number; // Market creation timestamp
 }
 
 /**
@@ -76,6 +77,16 @@ export class WorkflowOrchestrator extends EventEmitter {
   ): Promise<WorkflowState> {
     if (state.isPaused) {
       console.warn(`Market ${config.marketId} is paused. Skipping execution.`);
+      return state;
+    }
+
+    // GATING: Ensure market is at least 24 hours old before any verification (Requirement: Gemini Cost Optimization)
+    const marketAge = Date.now() - (config.createdAt * 1000);
+    const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000;
+    
+    if (marketAge < TWENTY_FOUR_HOURS && state.phase !== 'COMPLETED' && state.phase !== 'SETTLING') {
+      const remaining = Math.ceil((TWENTY_FOUR_HOURS - marketAge) / (60 * 60 * 1000));
+      // console.log(`⏳ Market ${config.marketId} is too young. Verification will pause for ~${remaining}h.`);
       return state;
     }
 
