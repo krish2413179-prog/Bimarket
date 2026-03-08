@@ -31,6 +31,7 @@
     "typescript": "^5.3.0"
   },
   "dependencies": {
+    "@chainlink/cre-sdk": "^1.1.4",
     "@google/genai": "^1.44.0",
     "@google/generative-ai": "^0.24.1",
     "@openzeppelin/contracts": "^5.0.0",

@@ -1,0 +1,22 @@
+specVersion: v1
+name: domino-effect-prediction-market
+description: "Autonomous AI-powered prediction market using Chainlink CRE. Markets are generated every 30 minutes from live news via Gemini AI and settled on Sepolia via EVMClient."
+
+workflows:
+  - name: market-generator
+    description: "Fetches real-world news, generates a Domino Effect prediction market using Gemini AI, uploads metadata to IPFS via Pinata, and deploys the market to Sepolia."
+    entryPoint: workflows/cre/domino-workflow.ts
+    config: workflows/cre/config.json
+
+  - name: oracle-verifier
+    description: "Reads active markets from the MarketRegistry contract, filters markets older than 24 hours, and uses Gemini AI to verify event conditions and trigger settlement."
+    entryPoint: workflows/cre/oracle-workflow.ts
+    config: workflows/cre/oracle-config.json
+
+capabilities:
+  - id: cron-trigger
+    type: scheduler/cron
+  - id: http-client
+    type: networking/http
+  - id: evm-client
+    type: blockchain/evm

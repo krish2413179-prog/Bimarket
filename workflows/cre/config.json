@@ -1,0 +1,11 @@
+{
+  "schedule": "0 */30 * * * *",
+  "geminiApiKey": "$GEMINI_API_KEY",
+  "pinataApiKey": "$PINATA_API_KEY",
+  "pinataApiSecret": "$PINATA_API_SECRET",
+  "evm": {
+    "chainSelectorName": "ethereum-testnet-sepolia",
+    "marketRegistryAddress": "$MARKET_REGISTRY_ADDRESS",
+    "engineAddress": "$ENGINE_ADDR"
+  }
+}

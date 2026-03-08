@@ -1,0 +1,8 @@
+{
+  "geminiApiKey": "$GEMINI_API_KEY",
+  "evm": {
+    "chainSelectorName": "ethereum-testnet-sepolia",
+    "marketRegistryAddress": "$MARKET_REGISTRY_ADDRESS",
+    "settlementManagerAddress": "$SETTLEMENT_MANAGER_ADDRESS"
+  }
+}
