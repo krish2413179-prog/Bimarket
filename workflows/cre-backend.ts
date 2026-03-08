@@ -237,13 +237,18 @@ async function start() {
   setInterval(runOrchestrationLoop, 10 * 60 * 1000); // 10 min
   setInterval(generateAndDeployMarket, 30 * 60 * 1000); // 30 min
   
-  // 3. Simple HTTP Server for Render Health Checks
+  // 3. Simple HTTP Server for Render Health Checks (with CORS for Vercel)
   const port = process.env.PORT || 10000;
   http.createServer((req, res) => {
-    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.writeHead(200, { 
+      'Content-Type': 'text/plain',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type'
+    });
     res.end('Domino Effect CRE Backend is Online\n');
   }).listen(port, () => {
-    console.log(`📡 [Healthy] Health check listener active on port ${port}`);
+    console.log(`📡 [Healthy] Health check listener active on port ${port} (CORS Enabled)`);
   });
 }
 
