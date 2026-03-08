@@ -67,7 +67,7 @@ export class MarketService {
         if (!m.ipfsHash || m.ipfsHash === "QmMockHashForLocalTesting1234567890") return null;
 
         try {
-            const res = await fetch(`https://cloudflare-ipfs.com/ipfs/${m.ipfsHash}`);
+            const res = await fetch(`https://ipfs.io/ipfs/${m.ipfsHash}`);
             if (res.ok) {
               const json = await res.json();
               // Filter out fallback markets
@@ -146,7 +146,7 @@ export class MarketService {
         if (!m.ipfsHash || m.ipfsHash === "QmMockHashForLocalTesting1234567890") return null;
 
         try {
-            const res = await fetch(`https://cloudflare-ipfs.com/ipfs/${m.ipfsHash}`);
+            const res = await fetch(`https://ipfs.io/ipfs/${m.ipfsHash}`);
             if (res.ok) {
               const json = await res.json();
               // Filter out fallback markets
