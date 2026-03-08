@@ -9,8 +9,8 @@ import TradeModal from './components/TradeModal';
 import WorkflowVisualizer from './components/WorkflowVisualizer';
 import { useNavigate, useParams, Outlet, useOutletContext } from 'react-router-dom';
 
-const REGISTRY_ADDR = "0x5a5b785f9f5Ed61f0A839a6CABBaB029b4Ba2C8B";
-const ENGINE_ADDR = "0xF5d91d8DEe6c6d8044A7a09DC299F6E124d5C603";
+const REGISTRY_ADDR = "0x23D6c7832D9ee75C43d75A4100e515ED688Ae7A4";
+const ENGINE_ADDR = "0x197c6c04a6257f1cc6Bfa0F8adf795f0edC62978";
 
 type ContextType = {
   markets: MarketData[];

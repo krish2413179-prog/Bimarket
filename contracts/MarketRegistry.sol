@@ -76,6 +76,9 @@ contract MarketRegistry {
     /// @notice Reference to the SettlementManager contract
     address public settlementManager;
 
+    /// @notice Authorized Keystone Forwarder address
+    address public keystoneForwarder = 0x15fC6ae953E024d975e77382eEeC56A9101f9F88;
+
     /**
      * @notice Constructor to set the TradingEngine address
      * @param _tradingEngine Address of the TradingEngine contract
@@ -83,6 +86,17 @@ contract MarketRegistry {
     constructor(address _tradingEngine) {
         require(_tradingEngine != address(0), "Invalid TradingEngine address");
         tradingEngine = TradingEngine(_tradingEngine);
+    }
+
+    /**
+     * @notice Sets the Keystone Forwarder address
+     * @param _keystoneForwarder New forwarder address
+     */
+    function setKeystoneForwarder(address _keystoneForwarder) external {
+        // Simple authorization: only creator of first market or hardcoded logic for demo
+        // In production, use Ownable or AccessControl
+        require(keystoneForwarder == address(0) || msg.sender == 0x24c80f19649c0Da8418011eF0B6Ed3e22007758c, "Unauthorized");
+        keystoneForwarder = _keystoneForwarder;
     }
 
     /**
@@ -368,5 +382,28 @@ contract MarketRegistry {
      */
     function getMarketCount() external view returns (uint256) {
         return marketIds.length;
+    }
+
+    /**
+     * @notice Entry point for Chainlink CRE reports
+     * @dev Called by the Keystone Forwarder
+     * @param report The ABI-encoded call to createMarket
+     */
+    function onReport(bytes calldata /* metadata */, bytes calldata report) external {
+        require(msg.sender == keystoneForwarder, "Only Keystone Forwarder");
+        
+        // Execute the report as calldata on this contract
+        (bool success, bytes memory returnData) = address(this).call(report);
+        
+        if (!success) {
+            if (returnData.length > 0) {
+                // bubble up the error
+                assembly {
+                    revert(add(32, returnData), mload(returnData))
+                }
+            } else {
+                revert("Report execution failed");
+            }
+        }
     }
 }

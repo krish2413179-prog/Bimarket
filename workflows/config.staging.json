@@ -3,10 +3,9 @@
   "geminiApiKey": "AIzaSyACh1kA9fHyLqK2bnGC31V51g18wv8L5cg",
   "pinataApiKey": "2633ffdb840677223bd8",
   "pinataApiSecret": "6cd3032387749006a2ed7e3d4dda4dc9fab7c5f9ae0f311ad160d83d04fdbbcb",
-  "marketRegistryAddress": "0x5a5b785f9f5Ed61f0A839a6CABBaB029b4Ba2C8B",
+  "marketRegistryAddress": "0x23D6c7832D9ee75C43d75A4100e515ED688Ae7A4",
   "sepoliaRpcUrl": "https://ethereum-sepolia-rpc.publicnode.com",
   "privateKey": "4f2f402e4fa4fe0b24025ac812e7ff84118b80239728baebe5866795c560fa01",
-  "marketRegistryAddress": "0x13AdAA22517Ef23ac0F614693784BA85a561AcF7",
   "gasLimit": "500000",
   "gnewsApiKey": "33ffc983def8d7c9558915b50757ea3c"
 }
