@@ -6,6 +6,7 @@ import { StateManager } from "./StateManager";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import pinataSDK from "@pinata/sdk";
 import path from "path";
+import http from "http";
 
 // Load environment variables
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
@@ -232,9 +233,18 @@ async function start() {
   await runOrchestrationLoop();
   await generateAndDeployMarket();
 
-  // 2. Set intervals for rapid demo (Updated: 30-min generation, 10-min poll)
-  setInterval(runOrchestrationLoop, 10 * 60 * 1000); // Poll every 10 min
-  setInterval(generateAndDeployMarket, 30 * 60 * 1000); // Generate every 30 mins
+  // 2. Set intervals for rapid demo (30-min generation, 10-min poll)
+  setInterval(runOrchestrationLoop, 10 * 60 * 1000); // 10 min
+  setInterval(generateAndDeployMarket, 30 * 60 * 1000); // 30 min
+  
+  // 3. Simple HTTP Server for Render Health Checks
+  const port = process.env.PORT || 10000;
+  http.createServer((req, res) => {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('Domino Effect CRE Backend is Online\n');
+  }).listen(port, () => {
+    console.log(`📡 [Healthy] Health check listener active on port ${port}`);
+  });
 }
 
 start().catch(console.error);
