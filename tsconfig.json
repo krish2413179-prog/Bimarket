@@ -15,6 +15,6 @@
     "declarationMap": true,
     "sourceMap": true
   },
-  "include": ["workflows/**/*", "scripts/**/*", "test/**/*"],
+  "include": ["workflows/**/*", "scripts/**/*", "test/**/*", "./hardhat.config.ts"],
   "exclude": ["node_modules", "dist", "cache", "artifacts", "out"]
 }
