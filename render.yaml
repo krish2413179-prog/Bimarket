@@ -27,7 +27,6 @@ services:
         value: /app/workflow_state/data
       - key: POLL_INTERVAL_SECONDS
         value: 300
-    mountPath: /app/workflow_state
     disk:
       name: cre-state-storage
       mountPath: /app/workflow_state/data
