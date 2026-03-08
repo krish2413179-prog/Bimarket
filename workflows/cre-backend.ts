@@ -38,7 +38,7 @@ async function fetchTopNews(): Promise<string> {
 
 async function generateAndDeployMarket() {
   console.log("\n🤖 [Generator] Starting AI Autonomous Market Generation cycle...");
-  const aiKey = process.env.GEMINI_API_KEY;
+  const aiKey = (process.env.GEMINI_API_KEY || "").trim();
   if (!aiKey) return console.error("❌ Missing GEMINI_API_KEY");
 
   const FALLBACK_MARKET = {
@@ -109,7 +109,7 @@ async function generateAndDeployMarket() {
     }
 
     const provider = new ethers.JsonRpcProvider(process.env.SEPOLIA_RPC_URL);
-    const walletKey = process.env.PRIVATE_KEY || "";
+    const walletKey = (process.env.PRIVATE_KEY || "").trim();
     const deployer = new ethers.Wallet(walletKey, provider);
     const registry = new ethers.Contract(process.env.MARKET_REGISTRY_ADDRESS || "", REGISTRY_ABI, deployer);
 
@@ -138,7 +138,7 @@ async function runOrchestrationLoop() {
   const registry = new ethers.Contract(process.env.MARKET_REGISTRY_ADDRESS || "", REGISTRY_ABI, provider);
   const monitor = new EventMonitor();
   const stateManager = new StateManager(process.env.WORKFLOW_STATE_PATH || "./workflow_state");
-  const workflowSigner = new ethers.Wallet(process.env.PRIVATE_KEY || "", provider);
+  const workflowSigner = new ethers.Wallet((process.env.PRIVATE_KEY || "").trim(), provider);
   const orchestrator = new WorkflowOrchestrator(workflowSigner, monitor);
 
   try {
