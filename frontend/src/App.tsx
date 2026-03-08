@@ -109,40 +109,73 @@ export const DiscoverPage: React.FC = () => {
           <p style={{ color: 'var(--text-muted)', marginTop: '8px' }}>The AI Agent will deploy new cascading prediction markets soon.</p>
         </div>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          {markets.map((m: any) => (
-            <div key={m.marketId} className="glass-card list-row" onClick={() => navigate(`/market/${m.marketId}`)}>
-              <div className="row-status">
-                <span className={`badge ${m.state === 0 ? 'badge-active' : m.state === 1 ? 'badge-monitoring' : 'badge-settled'}`}>
-                  {m.state === 0 ? 'Monitoring A' : m.state === 1 ? 'Monitoring B' : 'Settled'}
-                </span>
-              </div>
-              
-              <div className="row-content">
-                <div className="event-block event-a">
-                  <div className="event-label">TRIGGER EVENT</div>
-                  <h4 className="event-title">{m.descriptionA}</h4>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          {[...markets].sort((a: any, b: any) => (b.createdAt || 0) - (a.createdAt || 0)).map((m: any) => (
+            <div
+              key={m.marketId}
+              className="glass-card"
+              onClick={() => navigate(`/market/${m.marketId}`)}
+              style={{ cursor: 'pointer', padding: '28px 32px', transition: 'var(--transition-smooth)' }}
+            >
+              {/* Header: badge + date + stats + action */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <span className={`badge ${m.state === 0 ? 'badge-active' : m.state === 1 ? 'badge-monitoring' : 'badge-settled'}`}>
+                    {m.state === 0 ? 'Monitoring A' : m.state === 1 ? 'Monitoring B' : 'Settled'}
+                  </span>
+                  {m.createdAt ? (
+                    <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+                      {new Date(Number(m.createdAt) * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                    </span>
+                  ) : null}
                 </div>
-                
-                <div className="event-arrow">
-                  <ArrowLeft size={16} style={{ transform: 'rotate(180deg)' }} />
-                </div>
-                
-                <div className="event-block event-b">
-                  <div className="event-label">TARGET OUTCOME</div>
-                  <h4 className="event-title">{m.descriptionB}</h4>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '24px', flexShrink: 0 }}>
+                  <div style={{ textAlign: 'right' }}>
+                    <div style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text-primary)' }}>
+                      {(Number(m.totalLiquidityA) + Number(m.totalLiquidityB)).toFixed(3)} ETH
+                    </div>
+                    <div style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: 600, letterSpacing: '0.05em' }}>TOTAL LIQ.</div>
+                  </div>
+                  <button
+                    className="btn-primary"
+                    style={{ padding: '8px 20px', fontSize: '13px' }}
+                    onClick={(e) => { e.stopPropagation(); navigate(`/market/${m.marketId}`); }}
+                  >
+                    Trade
+                  </button>
                 </div>
               </div>
 
-              <div className="row-stats">
-                  <div style={{ fontSize: '16px', fontWeight: 600, color: 'var(--text-primary)' }}>{Number(m.totalLiquidityA) + Number(m.totalLiquidityB)} ETH</div>
-                  <div style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: 600 }}>TOTAL LIQ.</div>
+              {/* Event A – full width */}
+              <div style={{ marginBottom: '18px' }}>
+                <div style={{
+                  display: 'inline-block', fontSize: '10px', fontWeight: 700, letterSpacing: '0.1em',
+                  color: 'var(--accent-primary)', background: 'rgba(0,240,255,0.07)',
+                  border: '1px solid rgba(0,240,255,0.18)', borderRadius: '4px',
+                  padding: '3px 8px', marginBottom: '10px'
+                }}>① TRIGGER</div>
+                <p style={{ fontSize: '15px', lineHeight: 1.7, color: 'var(--text-primary)', margin: 0 }}>
+                  {m.descriptionA}
+                </p>
               </div>
-              
-              <div className="row-actions">
-                <button className="btn-primary" style={{ padding: '8px 24px' }} onClick={(e) => { e.stopPropagation(); navigate(`/market/${m.marketId}`); }}>
-                  View Markets
-                </button>
+
+              {/* Connector */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '18px' }}>
+                <div style={{ width: '2px', height: '28px', background: 'linear-gradient(to bottom, var(--accent-primary), var(--accent-secondary))' }} />
+                <span style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: 600, letterSpacing: '0.05em' }}>IF TRIGGERED, THEN →</span>
+              </div>
+
+              {/* Event B – full width */}
+              <div>
+                <div style={{
+                  display: 'inline-block', fontSize: '10px', fontWeight: 700, letterSpacing: '0.1em',
+                  color: 'var(--accent-secondary)', background: 'rgba(139,92,246,0.07)',
+                  border: '1px solid rgba(139,92,246,0.18)', borderRadius: '4px',
+                  padding: '3px 8px', marginBottom: '10px'
+                }}>② CONSEQUENCE</div>
+                <p style={{ fontSize: '15px', lineHeight: 1.7, color: 'var(--text-primary)', margin: 0 }}>
+                  {m.descriptionB}
+                </p>
               </div>
             </div>
           ))}
