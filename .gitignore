@@ -36,3 +36,7 @@ frontend/test-results/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# CRE
+.cre_build_tmp.js
+workflow.wasm

@@ -13,17 +13,8 @@ const Navbar: React.FC<NavbarProps> = ({ lastEventTimestamp }) => {
   const [isBackendOnline, setIsBackendOnline] = useState<boolean | null>(null);
 
   useEffect(() => {
-    const checkHealth = async () => {
-      try {
-        const res = await fetch('https://domino-cre-backend.onrender.com');
-        setIsBackendOnline(res.ok);
-      } catch (e) {
-        setIsBackendOnline(false);
-      }
-    };
-    checkHealth();
-    const healthInterval = setInterval(checkHealth, 30000);
-    return () => clearInterval(healthInterval);
+    // In pure CRE mode, the engine is always "Decentralized" and powered by Chainlink
+    setIsBackendOnline(true);
   }, []);
 
   useEffect(() => {
@@ -101,8 +92,8 @@ const Navbar: React.FC<NavbarProps> = ({ lastEventTimestamp }) => {
             boxShadow: isBackendOnline ? '0 0 10px #10b981' : 'none',
             animation: isBackendOnline ? 'pulse 2s infinite' : 'none'
           }} />
-          <span style={{ color: 'var(--text-secondary)', fontWeight: 500 }}>
-            ENGINE: {isBackendOnline === null ? 'SYNCING' : (isBackendOnline ? 'ONLINE' : 'OFFLINE')}
+          <span style={{ color: 'var(--text-secondary)', fontWeight: 600 }}>
+            AI ORACLE: {isBackendOnline === null ? 'SYNCING' : 'ACTIVE'}
           </span>
         </div>
 

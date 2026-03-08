@@ -7,8 +7,7 @@
     "test": "jest",
     "test:contracts": "forge test",
     "compile": "hardhat compile",
-    "deploy": "hardhat run scripts/deploy.ts",
-    "cre:backend": "ts-node workflows/cre-backend.ts"
+    "deploy": "hardhat run scripts/deploy.ts"
   },
   "keywords": [
     "prediction-market",
@@ -31,17 +30,8 @@
     "typescript": "^5.3.0"
   },
   "dependencies": {
-    "@chainlink/cre-sdk": "^1.1.4",
-    "@google/genai": "^1.44.0",
-    "@google/generative-ai": "^0.24.1",
     "@openzeppelin/contracts": "^5.0.0",
-    "@pinata/sdk": "^2.1.0",
-    "@types/body-parser": "^1.19.6",
-    "@types/express": "^5.0.6",
-    "body-parser": "^2.2.2",
     "dotenv": "^16.3.0",
-    "ethers": "^6.9.0",
-    "express": "^5.2.1",
-    "lodash.get": "^4.4.2"
+    "ethers": "^6.9.0"
   }
 }

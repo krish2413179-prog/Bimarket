@@ -67,17 +67,30 @@ export class MarketService {
         if (!m.ipfsHash || m.ipfsHash === "QmMockHashForLocalTesting1234567890") return null;
 
         try {
-            const res = await fetch(`https://ipfs.io/ipfs/${m.ipfsHash}`);
-            if (res.ok) {
-              const json = await res.json();
-              // Filter out fallback markets
-              if (json.marketTitle && json.marketTitle.includes("Middle East Supply Chain Disruption")) {
-                return null;
+            const gateways = [
+              `https://ipfs.io/ipfs/${m.ipfsHash}`,
+              `https://cloudflare-ipfs.com/ipfs/${m.ipfsHash}`,
+              `https://dweb.link/ipfs/${m.ipfsHash}`
+            ];
+            
+            let json: any = null;
+            for (const url of gateways) {
+              try {
+                const res = await fetch(url, { signal: AbortSignal.timeout(5000) });
+                if (res.ok) {
+                  json = await res.json();
+                  break; 
+                }
+              } catch (e) {
+                continue;
               }
-              descA = json.marketTitle ? `[${json.marketTitle}] ${json.eventA?.description}` : (json.eventA?.description || "Unknown Event A");
-              descB = json.eventB?.description || "Unknown Event B";
+            }
+
+            if (json) {
+              descA = json.marketTitle ? `[${json.marketTitle}] ${json.eventA?.description || json.eventA}` : (json.eventA?.description || json.eventA || "Unknown Event A");
+              descB = json.eventB?.description || json.eventB || "Unknown Event B";
             } else {
-              return null;
+              return null; // Skip if metadata can't be fetched
             }
         } catch (e) {
             console.error("Failed to fetch IPFS CID:", m.ipfsHash, e);
@@ -146,15 +159,28 @@ export class MarketService {
         if (!m.ipfsHash || m.ipfsHash === "QmMockHashForLocalTesting1234567890") return null;
 
         try {
-            const res = await fetch(`https://ipfs.io/ipfs/${m.ipfsHash}`);
-            if (res.ok) {
-              const json = await res.json();
-              // Filter out fallback markets
-              if (json.marketTitle && json.marketTitle.includes("Middle East Supply Chain Disruption")) {
-                return null;
+            const gateways = [
+              `https://ipfs.io/ipfs/${m.ipfsHash}`,
+              `https://cloudflare-ipfs.com/ipfs/${m.ipfsHash}`,
+              `https://dweb.link/ipfs/${m.ipfsHash}`
+            ];
+            
+            let json: any = null;
+            for (const url of gateways) {
+              try {
+                const res = await fetch(url, { signal: AbortSignal.timeout(5000) });
+                if (res.ok) {
+                  json = await res.json();
+                  break;
+                }
+              } catch (e) {
+                continue;
               }
-              descA = json.eventA?.description || "Unknown Event A";
-              descB = json.eventB?.description || "Unknown Event B";
+            }
+
+            if (json) {
+              descA = json.eventA?.description || json.eventA || "Unknown Event A";
+              descB = json.eventB?.description || json.eventB || "Unknown Event B";
             }
         } catch (e) {
             console.error("Failed to fetch IPFS CID:", m.ipfsHash, e);

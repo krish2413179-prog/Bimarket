@@ -1,0 +1,5 @@
+config:
+  schedule: "* * * * *"
+  geminiApiKey: ${GEMINI_API_KEY}
+  pinataApiKey: ${PINATA_API_KEY}
+  pinataApiSecret: ${PINATA_API_SECRET}
