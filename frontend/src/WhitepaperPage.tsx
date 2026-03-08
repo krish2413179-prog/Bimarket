@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowLeft, BookOpen, Cpu, Shield, Zap, Layers, GitBranch, Database, Link2, Code2 } from 'lucide-react';
+import { ArrowLeft, BookOpen, Cpu, Shield, Zap, Layers, GitBranch, Database, Code2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const Section: React.FC<{ icon: React.ReactNode; number: string; title: string; color?: string; children: React.ReactNode }> = ({ icon, number, title, color = 'var(--accent-primary)', children }) => (
