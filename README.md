@@ -83,5 +83,5 @@ Domino Effect uses a **Cyber-Premium** aesthetic, featuring:
 
 ---
 
-## 📄 License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## Deployed Link
+https://bimarket-nu.vercel.app/
