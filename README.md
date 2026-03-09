@@ -45,8 +45,8 @@ Uses Chainlink Functions and custom AI Oracle logic to:
 ### Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/krish2413179-prog/Bimarket.git
-   cd Bimarket
+   git clone https://github.com/krish2413179-prog/Domino-market.git
+   cd Domino-market
    ```
 
 2. Install dependencies:
